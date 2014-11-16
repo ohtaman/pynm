@@ -13,6 +13,7 @@ from .itml import learn_metric, convert_data
 
 logger = logging.getLogger(__name__)
 
+
 def load_data(input_data,
               delimiter='\t',
               has_header=False):

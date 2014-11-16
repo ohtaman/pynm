@@ -8,11 +8,14 @@ from pynm.metric import cli
 
 dirname = os.path.dirname(__file__)
 
+
 def setup():
     pass
 
+
 def teardown():
     pass
+
 
 def test_cli_load_data():
     input_data_file = os.sep.join((dirname, 'input_data.csv'))
@@ -26,11 +29,13 @@ def test_cli_load_data():
     eq_(data[10][3], 1.0)
     eq_(header, None)
 
+
 def test_cli_load_labels():
     input_labels_file = os.sep.join((dirname, 'input_labels.csv'))
     with open(input_labels_file) as input_labels:
         labels = cli.load_labels(input_labels)
     eq_(labels, [1, -1, 1, 1, -1, -1, 1, 1, -1, -1, -1])
+
 
 def test_cli_load_pairs():
     input_pairs_file = os.sep.join((dirname, 'input_pairs.csv'))

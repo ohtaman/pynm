@@ -11,6 +11,7 @@ from pynm.metric import itml
 
 logger = logging.getLogger(__name__)
 
+
 def cos(a, b, metric=None):
     sum_a = sum(a)
     sum_b = sum(b)
@@ -31,7 +32,8 @@ def test_sample_from_pairs():
     for i, sample in enumerate(samples):
         if i > 10:
             break
-        ok_(sample in pairs, 'sample [%s] is not in pairs [%s]' % (sample, pairs))
+        ok_(sample in pairs, 'sample [%s] is not in pairs [%s]'
+            % (sample, pairs))
 
 
 def test_sample_from_labels():
@@ -78,4 +80,3 @@ def test_learn_metric_gather_similar_pairs():
 
     eig = numpy.linalg.eig(metric)
     ok_(min(eig[0]) >= 0, 'the metric must be (semi-)definite.')
-
