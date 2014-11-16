@@ -6,19 +6,21 @@ from setuptools import setup, find_packages
 
 files = []
 
-with open(os.sep.join((os.path.dirname(__file__), "requirements.txt"))) as f:
-    requires = f.read().splitlines()
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name="pynm",
       version="0.1",
       author="Mitsuhisa Ohta",
       author_email="ohtamans@gmail.com",
       description="Python Machine Learning Library",
+      long_description=read('README.md'),
       url="",
+      license="MIT",
       packages=find_packages(),
       package_data={"pynm": files},
       include_package_data=True,
-      install_requires=requires,
+      install_requires=read('requirements.txt').splitlines(),
       test_suite="nose.collector",
       entry_points="""
       [console_scripts]
