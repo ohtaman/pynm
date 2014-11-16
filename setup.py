@@ -23,4 +23,5 @@ setup(name="pynm",
       entry_points="""
       [console_scripts]
       pynm-metric = pynm.metric.cli:main
+      pynm-bandit = pynm.reinforce.bandit.cli:main
       """)
