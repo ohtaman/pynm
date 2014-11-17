@@ -25,6 +25,5 @@ setup(name="pynm",
       test_suite="nose.collector",
       entry_points="""
       [console_scripts]
-      pynm-metric = pynm.metric.cli:main
-      pynm-bandit = pynm.reinforce.bandit.cli:main
+      pynm = pynm.reinforce.__main__:main
       """)

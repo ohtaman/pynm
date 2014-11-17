@@ -5,25 +5,37 @@ import argparse
 import logging
 import sys
 
+from pynm.commands import metric
+
 logger = logging.getLogger(__name__)
 prog = 'pynm'
-commands = ['hoge', 'hage']
+commands = [metric.ItmlCommand()]
 
-def parse_args(args, prog=prog):
+def build_arg_parser(prog=prog, commands=commands):
     parser = argparse.ArgumentParser(
-        description='pynm Machine Leaner.',
+        description='pynm Machine Learning.',
         prog=prog
     )
-    subparsers = parser.add_subparsers(help='command -h')
+    subparsers = parser.add_subparsers(title='commands')
     for command in commands:
-        command_parser = subparsers.add_parser(command, help='hoge')
-        command_parser.add_argument('--fuge')
-    return parser.parse_args(args)
+        command_parser = subparsers.add_parser(command.name, help=command.help)
+        command_parser.set_defaults(func=command.run)
+        command.build_arg_parser(command_parser)
+    return parser
 
 
 def main(argv=sys.argv):
-    args = parse_args(argv[1:])
-    return 0
+    parser = build_arg_parser()
+    try:
+        args = parser.parse_args(argv[1:])
+    except SystemExit as e:
+        return e.code
+    if not hasattr(args, 'func'):
+        parser.print_help()
+        return 1
+
+    return args.func(args)
+
 
 if __name__ == '__main__':
     exit(main())
