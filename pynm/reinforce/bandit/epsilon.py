@@ -14,7 +14,7 @@ class EpsilonGreedyAgent:
         if random.random() <= self._epsilon:
             return random.choice(arms)
         else:
-            return max(arms, key=lamnda arm: self._expected(arm))
+            return max(arms, key=lambda arm: self._expected(arm))
 
     def _expected(self, arm):
         if self._counts[arm] > 0:
