@@ -25,5 +25,5 @@ setup(name="pynm",
       test_suite="nose.collector",
       entry_points="""
       [console_scripts]
-      pynm = pynm.reinforce.__main__:main
+      pynm = pynm.__main__:main
       """)

@@ -7,6 +7,8 @@ import numpy
 
 from pynm.metric.itml import learn_metric, convert_data
 
+
+
 class ItmlCommand:
     name = 'itml'
     help = 'Information Theoretic Metric Learning'
@@ -49,6 +51,7 @@ class ItmlCommand:
                                 type=str,
                                 metavar='FILE',
                                 help='output weights file')
+
             parser.add_argument('-d',
                                 '--delimiter',
                                 default='\t',
@@ -58,16 +61,11 @@ class ItmlCommand:
             parser.add_argument('-s',
                                 '--sparse',
                                 action='store_true',
-                                help='sparse format')
+                                help='sparse format (not implemented yet)')
             parser.add_argument('--header',
                                 action='store_true',
                                 help='has header')
-            parser.add_argument('-S',
-                                '--slack',
-                                default=1.0,
-                                type=float,
-                                metavar='SLACK',
-                                help='slack variable')
+
             parser.add_argument('-U',
                                 '--u_param',
                                 default=1.0,
@@ -80,13 +78,18 @@ class ItmlCommand:
                                 type=float,
                                 metavar='DISTANCE',
                                 help='L parameter (min distance for different labels)')
+            parser.add_argument('-S',
+                                '--slack',
+                                default=1.0,
+                                type=float,
+                                metavar='SLACK',
+                                help='slack variable')
             parser.add_argument('-N',
                                 '--max_iteration_number',
                                 default=1000,
                                 type=int,
                                 metavar='MAX',
                                 help='max iteration')
-            return parser
 
 
     def run(self, args):
@@ -203,4 +206,28 @@ class ItmlCommand:
             writer.writerow(header)
         for row in data:
             writer.writerow(row)
+
+
+class MetricCommand:
+    name = 'metric'
+    help = 'Metric Learning'
+
+    sub_commands = [ItmlCommand()]
+
+    def build_arg_parser(self, parser):
+        subparsers = parser.add_subparsers(title='algorithm', dest='algorithm')
+        for command in self.sub_commands:
+            subparser = subparsers.add_parser(command.name, help=command.help)
+            command.build_arg_parser(subparser)
+        self._parser = parser
+
+    def run(self, args):
+        if args.algorithm is None:
+            self._parser.print_help()
+            return 1
+        sub_command = self._get_sub_command(args.algorithm)
+        return sub_command.run(args)
+
+    def _get_sub_command(self, algorithm):
+        return list(filter(lambda x: x.name == algorithm, self.sub_commands))[0]
 

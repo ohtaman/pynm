@@ -36,3 +36,4 @@ def test_cli_can_build_command_arg_parser():
     parser = main_module.build_arg_parser(commands=[DummyCommand()])
     args = parser.parse_args(['test'])
     eq_(num, args.func(args))
+
