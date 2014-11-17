@@ -5,8 +5,8 @@ import random
 
 
 class EpsilonGreedyAgent:
-    def __init__(self, epsilon=0.001):
-        self._epsilon = epsiron
+    def __init__(self, epsilon=0.01):
+        self._epsilon = epsilon
         self._counts = defaultdict(int)
         self._sums = defaultdict(int)
 

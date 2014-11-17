@@ -7,8 +7,8 @@ import sys
 
 
 class UCB1Agent:
-    def __init__(self, epsilon=0.001):
-        self._epsilon = epsiron
+    def __init__(self, c=1):
+        self._c = c
         self._counts = defaultdict(int)
         self._sums = defaultdict(int)
         self._total_count = 0
@@ -25,7 +25,7 @@ class UCB1Agent:
         else:
             count = self._counts[arm]
             return (self._sums[arm]/count
-                    + math.sqrt(2*math.log(self._total_count)/count))
+                    + self._c*math.sqrt(2*math.log(self._total_count)/count))
 
     def update(self, arm, reward, arms=None, features=None):
         self._total_count += 1
