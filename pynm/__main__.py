@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 prog = 'pynm'
 commands = [metric.MetricCommand()]
 
+
 def build_arg_parser(prog=prog, commands=commands):
     parser = argparse.ArgumentParser(
         description='pynm Machine Learning.',
