@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
 import csv
-import logging
 
 import numpy
 
@@ -13,7 +12,8 @@ class ItmlCommand:
     name = 'itml'
     help = 'Information Theoretic Metric Learning'
 
-    def build_arg_parser(self, parser):
+    @classmethod
+    def build_arg_parser(cls, parser):
             parser.add_argument('-i',
                                 '--input_data',
                                 default=None,
@@ -57,7 +57,7 @@ class ItmlCommand:
                                 default='\t',
                                 type=str,
                                 metavar='DELIM',
-                                help='delimiter')
+                                help='delimiter (default: "\\t")')
             parser.add_argument('-s',
                                 '--sparse',
                                 action='store_true',
@@ -71,26 +71,25 @@ class ItmlCommand:
                                 default=1.0,
                                 type=float,
                                 metavar='DISTANCE',
-                                help='U parameter (max distance for same labels)')
+                                help='U parameter (max distance for same labels, default: 1.0)')
             parser.add_argument('-L',
                                 '--l_param',
                                 default=1.0,
                                 type=float,
                                 metavar='DISTANCE',
-                                help='L parameter (min distance for different labels)')
+                                help='L parameter (min distance for different labels, default: 1.0)')
             parser.add_argument('-S',
                                 '--slack',
                                 default=1.0,
                                 type=float,
                                 metavar='SLACK',
-                                help='slack variable')
+                                help='slack variable (default: 1.0)')
             parser.add_argument('-N',
                                 '--max_iteration_number',
                                 default=1000,
                                 type=int,
                                 metavar='MAX',
-                                help='max iteration')
-
+                                help='max iteration (default: 1000)')
 
     def run(self, args):
         with open(args.input_data) as in_:
@@ -212,7 +211,7 @@ class MetricCommand:
     name = 'metric'
     help = 'Metric Learning'
 
-    sub_commands = [ItmlCommand()]
+    sub_commands = [ItmlCommand]
 
     def build_arg_parser(self, parser):
         subparsers = parser.add_subparsers(title='algorithm', dest='algorithm')
@@ -229,5 +228,5 @@ class MetricCommand:
         return sub_command.run(args)
 
     def _get_sub_command(self, algorithm):
-        return list(filter(lambda x: x.name == algorithm, self.sub_commands))[0]
+        return next(filter(lambda x: x.name == algorithm, self.sub_commands))()
 

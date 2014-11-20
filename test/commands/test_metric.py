@@ -10,6 +10,7 @@ dirname = os.path.dirname(__file__)
 testee = None
 
 def setup():
+    global testee
     testee = metric.ItmlCommand()
 
 
@@ -18,7 +19,10 @@ def teardown():
 
 
 def test_cli_load_data():
-    input_data_file = os.sep.join((dirname, 'input_data.csv'))
+    input_data_file = os.sep.join((dirname,
+                                   '..',
+                                   'metric',
+                                   'input_data.csv'))
     with open(input_data_file) as input_data:
         header, data = testee.load_data(input_data,
                                         delimiter='\t',
@@ -31,14 +35,20 @@ def test_cli_load_data():
 
 
 def test_cli_load_labels():
-    input_labels_file = os.sep.join((dirname, 'input_labels.csv'))
+    input_labels_file = os.sep.join((dirname,
+                                     '..',
+                                     'metric',
+                                     'input_labels.csv'))
     with open(input_labels_file) as input_labels:
         labels = testee.load_labels(input_labels)
     eq_(labels, [1, -1, 1, 1, -1, -1, 1, 1, -1, -1, -1])
 
 
 def test_cli_load_pairs():
-    input_pairs_file = os.sep.join((dirname, 'input_pairs.csv'))
+    input_pairs_file = os.sep.join((dirname,
+                                    '..',
+                                    'metric',
+                                    'input_pairs.csv'))
     with open(input_pairs_file) as input_pairs:
         pairs = testee.load_pairs(input_pairs)
     eq_(pairs[0], (0, 1, True))

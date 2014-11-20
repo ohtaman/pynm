@@ -14,14 +14,11 @@ class UCB1Agent:
         self._total_count = 0
 
     def choose(self, arms, features=None):
-        if random.random() <= self._epsilon:
-            return random.choice(arms)
-        else:
-            return max(arms, key=lambda arm: self._expected(arm))
+        return max(arms, key=lambda arm: self._ucb(arm))
 
-    def _score(self, arm):
+    def _ucb(self, arm):
         if self._counts[arm] == 0:
-            return sys.maxint
+            return sys.maxsize
         else:
             count = self._counts[arm]
             return (self._sums[arm]/count

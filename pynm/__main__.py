@@ -5,11 +5,11 @@ import argparse
 import logging
 import sys
 
-from pynm.commands import metric
+from pynm.commands import metric, bandit
 
 logger = logging.getLogger(__name__)
 prog = 'pynm'
-commands = [metric.MetricCommand()]
+commands = [metric.MetricCommand(), bandit.BanditCommand()]
 
 def build_arg_parser(prog=prog, commands=commands):
     parser = argparse.ArgumentParser(
