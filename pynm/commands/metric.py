@@ -7,7 +7,6 @@ import numpy
 from pynm.metric.itml import learn_metric, convert_data
 
 
-
 class ItmlCommand:
     name = 'itml'
     help = 'Information Theoretic Metric Learning'
@@ -127,7 +126,6 @@ class ItmlCommand:
                 self.export_data(o_, converted_data, header)
         return 0
 
-
     def load_data(self,
                   input_data,
                   delimiter='\t',
@@ -143,10 +141,8 @@ class ItmlCommand:
             data.append(numpy.array(list(map(lambda x: float(x), row))))
         return header, data
 
-
     def load_labels(self, input_labels):
         return list(map(lambda x: int(x), input_labels))
-
 
     def load_pairs(self, input_pairs, delimiter='\t', header=None):
         pairs = []
@@ -166,7 +162,6 @@ class ItmlCommand:
                 pairs.append((idx1, idx2, similar))
         return pairs
 
-
     def export_metric(self,
                       output,
                       metric,
@@ -181,7 +176,6 @@ class ItmlCommand:
         for row in metric:
             writer.writerow(row)
 
-
     def export_weights(self,
                        output,
                        weights,
@@ -190,7 +184,6 @@ class ItmlCommand:
         if header is not None:
             writer.writerow(header)
         writer.writerow(weights)
-
 
     def export_data(self,
                     output,
@@ -229,4 +222,3 @@ class MetricCommand:
 
     def _get_sub_command(self, algorithm):
         return next(filter(lambda x: x.name == algorithm, self.sub_commands))()
-
