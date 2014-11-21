@@ -2,8 +2,12 @@
 
 import os
 import shutil
+import sys
 import tempfile
-from unittest import mock
+if sys.version_info[0] == 2:
+    import mock
+else:
+    from unittest import mock
 
 from nose.tools import *
 
