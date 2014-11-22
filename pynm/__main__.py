@@ -17,7 +17,7 @@ def build_arg_parser(prog=prog, commands=commands):
         description='pynm Machine Learning.',
         prog=prog
     )
-    subparsers = parser.add_subparsers(title='commands')
+    subparsers = parser.add_subparsers(title='commands', dest='command')
     for command in commands:
         command_parser = subparsers.add_parser(command.name, help=command.help)
         command_parser.set_defaults(func=command.run)
@@ -31,9 +31,10 @@ def main(argv=sys.argv):
         args = parser.parse_args(argv[1:])
     except SystemExit as e:
         return e.code
+
     if not hasattr(args, 'func'):
         parser.print_help()
-        return 1
+        return 2
 
     return args.func(args)
 

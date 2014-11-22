@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import csv
+import sys
 
 import numpy
 
@@ -13,88 +14,94 @@ class ItmlCommand:
 
     @classmethod
     def build_arg_parser(cls, parser):
-            parser.add_argument('-i',
-                                '--input_data',
-                                default=None,
-                                type=str,
-                                metavar='FILE',
-                                required=True,
-                                help='input data file')
-            parser.add_argument('-l',
-                                '--input_labels',
-                                default=None,
-                                type=str,
-                                metavar='FILE',
-                                help='input labels file')
-            parser.add_argument('-p',
-                                '--input_pairs',
-                                default=None,
-                                type=str,
-                                metavar='FILE',
-                                help='input pairs file')
-            parser.add_argument('-o',
-                                '--output_data',
-                                default=None,
-                                type=str,
-                                metavar='FILE',
-                                help='output data file')
-            parser.add_argument('-m',
-                                '--output_metric',
-                                default=None,
-                                type=str,
-                                metavar='FILE',
-                                help='output metric file')
-            parser.add_argument('-w',
-                                '--output_weights',
-                                default=None,
-                                type=str,
-                                metavar='FILE',
-                                help='output weights file')
+        parser.add_argument('-i',
+                            '--input_data',
+                            default=None,
+                            type=str,
+                            metavar='FILE',
+                            help='input data file')
+        label_or_pair = parser.add_mutually_exclusive_group(required=True)
+        label_or_pair.add_argument('-l',
+                                   '--input_labels',
+                                   default=None,
+                                   type=str,
+                                   metavar='FILE',
+                                   help='input labels file')
+        label_or_pair.add_argument('-p',
+                                   '--input_pairs',
+                                   default=None,
+                                   type=str,
+                                   metavar='FILE',
+                                   help='input pairs file')
+        parser.add_argument('-o',
+                            '--output_data',
+                            default=None,
+                            type=str,
+                            metavar='FILE',
+                            help='output data file')
+        parser.add_argument('-m',
+                            '--output_metric',
+                            default=None,
+                            type=str,
+                            metavar='FILE',
+                            help='output metric file')
+        parser.add_argument('-w',
+                            '--output_weights',
+                            default=None,
+                            type=str,
+                            metavar='FILE',
+                            help='output weights file')
 
-            parser.add_argument('-d',
-                                '--delimiter',
-                                default='\t',
-                                type=str,
-                                metavar='DELIM',
-                                help='delimiter (default: "\\t")')
-            parser.add_argument('-s',
-                                '--sparse',
-                                action='store_true',
-                                help='sparse format (not implemented yet)')
-            parser.add_argument('--header',
-                                action='store_true',
-                                help='has header')
+        parser.add_argument('-d',
+                            '--delimiter',
+                            default='\t',
+                            type=str,
+                            metavar='DELIM',
+                            help='delimiter (default: "\\t")')
+        parser.add_argument('-s',
+                            '--sparse',
+                            action='store_true',
+                            help='sparse format (not implemented yet)')
+        parser.add_argument('--header',
+                            action='store_true',
+                            help='has header')
 
-            parser.add_argument('-U',
-                                '--u_param',
-                                default=1.0,
-                                type=float,
-                                metavar='DISTANCE',
-                                help='U parameter (max distance for same labels, default: 1.0)')
-            parser.add_argument('-L',
-                                '--l_param',
-                                default=1.0,
-                                type=float,
-                                metavar='DISTANCE',
-                                help='L parameter (min distance for different labels, default: 1.0)')
-            parser.add_argument('-S',
-                                '--slack',
-                                default=1.0,
-                                type=float,
-                                metavar='SLACK',
-                                help='slack variable (default: 1.0)')
-            parser.add_argument('-N',
-                                '--max_iteration_number',
-                                default=1000,
-                                type=int,
-                                metavar='MAX',
-                                help='max iteration (default: 1000)')
+        parser.add_argument('-U',
+                            '--u_param',
+                            default=1.0,
+                            type=float,
+                            metavar='DISTANCE',
+                            help='U parameter (max distance for same labels, default: 1.0)')
+        parser.add_argument('-L',
+                            '--l_param',
+                            default=1.0,
+                            type=float,
+                            metavar='DISTANCE',
+                            help='L parameter (min distance for different labels, default: 1.0)')
+        parser.add_argument('-S',
+                            '--slack',
+                            default=1.0,
+                            type=float,
+                            metavar='SLACK',
+                            help='slack variable (default: 1.0)')
+        parser.add_argument('-N',
+                            '--max_iteration_number',
+                            default=1000,
+                            type=int,
+                            metavar='MAX',
+                            help='max iteration (default: 1000)')
 
     def run(self, args):
-        with open(args.input_data) as in_:
-            header, data = self.load_data(in_,
+        if args.input_data is not None:
+            with open(args.input_data) as in_:
+                header, data = self.load_data(in_,
+                                              delimiter=args.delimiter,
+                                              has_header=args.header)
+        else:
+            header, data = self.load_data(sys.stdin,
                                           delimiter=args.delimiter,
                                           has_header=args.header)
+
         if args.input_labels is not None:
             with open(args.input_labels) as in_:
                 labels = self.load_labels(in_)
@@ -205,20 +212,20 @@ class MetricCommand:
     help = 'Metric Learning'
 
     sub_commands = [ItmlCommand]
+    default_command = sub_commands[0]
 
     def build_arg_parser(self, parser):
+        self.default_command.build_arg_parser(parser)
         subparsers = parser.add_subparsers(title='algorithm', dest='algorithm')
         for command in self.sub_commands:
             subparser = subparsers.add_parser(command.name, help=command.help)
             command.build_arg_parser(subparser)
-        self._parser = parser
 
     def run(self, args):
-        if args.algorithm is None:
-            self._parser.print_help()
-            return 1
         sub_command = self._get_sub_command(args.algorithm)
         return sub_command.run(args)
 
     def _get_sub_command(self, algorithm):
+        if algorithm is None:
+            return self.default_command()
         return next(filter(lambda x: x.name == algorithm, self.sub_commands))()

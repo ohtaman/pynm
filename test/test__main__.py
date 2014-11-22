@@ -18,10 +18,7 @@ def teardown():
 
 
 def test_cli_needs_command_option():
-    if sys.version_info[0] == 2:
-        eq_(2, main_module.main(['pynm']))
-    else:
-        eq_(1, main_module.main(['pynm']))
+    eq_(2, main_module.main(['pynm']))
 
 def test_cli_can_show_help():
     eq_(0, main_module.main(['pynm', '-h']))
