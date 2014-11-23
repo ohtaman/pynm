@@ -4,6 +4,10 @@
 pynm is a Python Machine Learning Library.
 (under development yet.)
 
+## Concept
+
+Machine Learning for engineers not for data scientists.
+
 ## Installation
 
 To install pynm, simply:
