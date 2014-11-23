@@ -8,7 +8,7 @@ pynm is a Python Machine Learning Library.
 To install pynm, simply:
 
 ```
-$ sudo pip install https://github.com/ohtaman/pynm.git
+$ sudo pip install git+https://github.com/ohtaman/pynm.git
 ```
 
 or from source:
