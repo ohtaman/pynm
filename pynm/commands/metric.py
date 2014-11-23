@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import csv
+import fileinput
 import sys
 
 import numpy
@@ -16,10 +17,10 @@ class ItmlCommand:
     def build_arg_parser(cls, parser):
         parser.add_argument('-i',
                             '--input_data',
-                            default=None,
+                            default='-',
                             type=str,
                             metavar='FILE',
-                            help='input data file')
+                            help='input data file (default: stdin)')
         label_or_pair = parser.add_mutually_exclusive_group(required=True)
         label_or_pair.add_argument('-l',
                                    '--input_labels',
@@ -92,22 +93,17 @@ class ItmlCommand:
                             help='max iteration (default: 1000)')
 
     def run(self, args):
-        if args.input_data is not None:
-            with open(args.input_data) as in_:
-                header, data = self.load_data(in_,
-                                              delimiter=args.delimiter,
-                                              has_header=args.header)
-        else:
-            header, data = self.load_data(sys.stdin,
+        with fileinput.input(args.input_data) as in_:
+            header, data = self.load_data(in_,
                                           delimiter=args.delimiter,
                                           has_header=args.header)
 
         if args.input_labels is not None:
-            with open(args.input_labels) as in_:
+            with fileinput.input(args.input_labels) as in_:
                 labels = self.load_labels(in_)
                 pairs = None
         elif args.input_pairs is not None:
-            with open(args.input_pairs) as in_:
+            with fileinput.input(args.input_pairs) as in_:
                 pairs = self.load_pairs(in_)
                 labels = None
 
@@ -121,16 +117,25 @@ class ItmlCommand:
                               is_sparse=args.sparse)
 
         if args.output_metric is not None:
-            with open(args.output_metric, 'w') as o_:
-                self.export_metric(o_, metric, header)
+            if args.output_metric == '-':
+                self.export_metric(sys.stdout, metric, header)
+            else:
+                with open(args.output_metric, 'w') as o_:
+                    self.export_metric(o_, metric, header)
         if args.output_weights is not None:
             weights = numpy.diag(metric)
-            with open(args.output_weights, 'w') as o_:
-                self.export_weights(o_, weights, header)
+            if args.output_weights == '-':
+                self.export_weights(sys.stdout, weights, header)
+            else:
+                with open(args.output_weights, 'w') as o_:
+                    self.export_weights(o_, weights, header)
         if args.output_data is not None:
             converted_data = convert_data(metric, data)
-            with open(args.output_data, 'w') as o_:
-                self.export_data(o_, converted_data, header)
+            if args.output_data == '-':
+                self.export_data(sys.stdout, converted_data, header)
+            else:
+                with open(args.output_data, 'w') as o_:
+                    self.export_data(o_, converted_data, header)
         return 0
 
     def load_data(self,
