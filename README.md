@@ -1,6 +1,6 @@
 # pynm
 
-pynm is a Python Machine Learning Libraries.
+pynm is a Python Machine Learning Library.
 (under development yet.)
 
 ## Installation
