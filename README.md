@@ -1,4 +1,5 @@
-# pynm ![build status](https://travis-ci.org/ohtaman/pynm.svg?branch=master)
+# pynm
+![build status](https://travis-ci.org/ohtaman/pynm.svg?branch=master)
 
 pynm is a Python Machine Learning Library.
 (under development yet.)
