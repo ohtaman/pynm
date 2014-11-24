@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Pynm by ohtaman</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Pynm</h1>
+        <p class="header">Python Machine Learning Library</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/ohtaman/pynm/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/ohtaman/pynm/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/ohtaman/pynm">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/ohtaman">ohtaman</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="pynm" class="anchor" href="#pynm" aria-hidden="true"><span class="octicon octicon-link"></span></a>pynm</h1>
+
+<p><img src="https://travis-ci.org/ohtaman/pynm.svg?branch=master" alt="build status"></p>
+
+<p>pynm is a Python Machine Learning Library.
+(under development yet.)</p>
+
+<h2>
+<a id="concept" class="anchor" href="#concept" aria-hidden="true"><span class="octicon octicon-link"></span></a>Concept</h2>
+
+<p>Machine Learning for engineers not for data scientists.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>To install pynm, simply:</p>
+
+<pre><code>$ sudo pip install git+https://github.com/ohtaman/pynm.git
+</code></pre>
+
+<p>or from source:</p>
+
+<pre><code>$ curl -LO https://github.com/ohtaman/pynm/archive/master.zip
+$ unzip master.zip
+$ cd pynm-master
+$ sudp python setup.py install
+</code></pre>
+
+<h2>
+<a id="as-a-commandline-tool" class="anchor" href="#as-a-commandline-tool" aria-hidden="true"><span class="octicon octicon-link"></span></a>As a CommandLine Tool</h2>
+
+<ul>
+<li>show help</li>
+</ul>
+
+<pre><code>$ pynm -h
+usage: pynm [-h] {metric,bandit} ...
+
+pynm Machine Learning.
+
+optional arguments:
+  -h, --help       show this help message and exit
+
+commands:
+  {metric,bandit}
+    metric         Metric Learning
+    bandit         Bandit Agent
+</code></pre>
+
+<ul>
+<li>do metric learning</li>
+</ul>
+
+<pre><code>$ pynm metric -h
+usage: pynm metric [-h] [-i FILE] (-l FILE | -p FILE) [-o FILE] [-m FILE]
+                   [-w FILE] [-d DELIM] [-s] [--header] [-U DISTANCE]
+                   [-L DISTANCE] [-S SLACK] [-N MAX]
+                   {itml} ...
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i FILE, --input_data FILE
+                        input data file (default: stdin)
+  -l FILE, --input_labels FILE
+                        input labels file
+  -p FILE, --input_pairs FILE
+                        input pairs file
+  -o FILE, --output_data FILE
+                        output data file
+  -m FILE, --output_metric FILE
+                        output metric file
+  -w FILE, --output_weights FILE
+                        output weights file
+  -d DELIM, --delimiter DELIM
+                        delimiter (default: "\t")
+  -s, --sparse          sparse format (not implemented yet)
+  --header              has header
+  -U DISTANCE, --u_param DISTANCE
+                        U parameter (max distance for same labels, default:
+                        1.0)
+  -L DISTANCE, --l_param DISTANCE
+                        L parameter (min distance for different labels,
+                        default: 1.0)
+  -S SLACK, --slack SLACK
+                        slack variable (default: 1.0)
+  -N MAX, --max_iteration_number MAX
+                        max iteration (default: 1000)
+
+algorithm:
+  {itml}
+    itml                Information Theoretic Metric Learning
+</code></pre>
+
+<ul>
+<li>do bandit</li>
+</ul>
+
+<pre><code>usage: pynm bandit [-h] [-i FILE] [-o FILE] [-a {ucb1,epsilon,thompson}]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i FILE, --input FILE
+                        input file
+  -o FILE, --output FILE
+                        output file
+  -a {ucb1,epsilon,thompson}, --algorithm {ucb1,epsilon,thompson}
+                        algorithm
+</code></pre>
+
+<h2>
+<a id="as-a-python-library" class="anchor" href="#as-a-python-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>As a Python Library</h2>
+
+<pre><code>&gt;&gt;&gt; import pynm
+</code></pre>
+
+<h3>
+<a id="data-handling" class="anchor" href="#data-handling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Handling</h3>
+
+<h3>
+<a id="regression" class="anchor" href="#regression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Regression</h3>
+
+<h3>
+<a id="clustering" class="anchor" href="#clustering" aria-hidden="true"><span class="octicon octicon-link"></span></a>Clustering</h3>
+
+<h3>
+<a id="classification" class="anchor" href="#classification" aria-hidden="true"><span class="octicon octicon-link"></span></a>Classification</h3>
+
+<h3>
+<a id="metric-learning" class="anchor" href="#metric-learning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Metric Learning</h3>
+
+<h3>
+<a id="bandit" class="anchor" href="#bandit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bandit</h3>
+
+<h3>
+<a id="closs-validation" class="anchor" href="#closs-validation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Closs Validation</h3>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
