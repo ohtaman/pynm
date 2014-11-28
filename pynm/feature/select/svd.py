@@ -1,34 +1,37 @@
 # -*- coding:utf-8 -*-
 
-from numpy import random, linalg
+import numpy.random
+import numpy.linalg
 
+def _orthogonalize(matrix):
+    return numpy.linalg.qr(matrix)[0]
 
-def orth(matrix):
-    return linalg.qr(matrix)[0]
+def svd(matrix, d=None, k=10, u=True, s=True, v=True, seed=None, approx=True):
 
-def random_orthogonal_matrix(shape):
-    return linalg.qr(random.normal(size=shape))[0]
+    max_rank = min(matrix.shape)
+    d = d if d is not None else max_rank
+    # to reduce error, calc with dim=internal_d internally
+    internal_d = min(d + k, max_rank)
 
-def svd(matrix, d=None, k=10, u=True, s=True, v=True):
-    if d is None:
-        d = min(matrix.shape)
+    if internal_d == max_rank or not approx:
+        u_, s_, v_ = numpy.linalg.svd(matrix)
+        return u_[:, :d], s_[:d], v_[:d, :]
 
-    internal_d = min(d + k, min(matrix.shape))
-    if internal_d == min(matrix.shape):
-        u_, s_, v_ = linalg.svd(matrix)
-        return u_[:, :d], s_[:d], v_[:, :d]
-
+    # cost effective
     if matrix.shape[0] > matrix.shape[1]:
-        u_, s_, v_ = svd(matrix.transpose(), d, k, u, s, v)
-        return v_.transpose(), s_, u_.transpose()
+        v_, s_, u_ = svd(matrix.transpose(), d, k, v, s, u, seed, approx)
+        return (u_.transpose() if u else None,
+                s_ if s else None,
+                v_.transpose() if v else None)
 
-    o = random.normal(size=(matrix.shape[0], internal_d))
-    y = orth(matrix.transpose().dot(o))
+    np_random = numpy.random.RandomState(seed)
+    o = np_random.normal(size=(matrix.shape[0], internal_d))
+    y = _orthogonalize(matrix.transpose().dot(o))
     b = matrix.dot(y)
-    p = random.normal(size=(internal_d, internal_d))
-    z = orth(b.dot(p))
+    p = np_random.normal(size=(internal_d, internal_d))
+    z = _orthogonalize(b.dot(p))
     c = z.transpose().dot(b)
-    u_, s_, v_ = linalg.svd(c)
+    u_, s_, v_ = numpy.linalg.svd(c)
     return (z.dot(u_[:, :d]) if u else None,
             s_[:d] if s else None,
-            y.dot(v_[:, :d]) if v else None)
+            v_[:d, :].dot(y.transpose()) if v else None)
