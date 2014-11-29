@@ -2,19 +2,21 @@
 
 from collections import defaultdict
 
-from numpy import random
-
+import numpy
 
 class ThompsonAgent:
-    def __init__(self):
+    def __init__(self, seed=None):
         self._succeeds = defaultdict(int)
         self._fails = defaultdict(int)
+        self._np_random = numpy.random.RandomState(seed)
 
     def choose(self, arms, features=None):
         return max(arms, key=lambda arm: self._score(arm))
 
     def _score(self, arm):
-        return random.beta(self._succeeds[arm] + 0.5, self._fails[arm] + 0.5)
+        return self._np_random.beta(
+            self._succeeds[arm] + 0.5,
+            self._fails[arm] + 0.5)
 
     def update(self, arm, reward, arms=None, features=None):
         if reward > 0:

@@ -5,22 +5,23 @@ import random
 import numpy
 import numpy.linalg
 
-def kmeans_pp(dataset, k):
+def kmeans_pp(dataset, k, seed=None):
     def get_weight(centers, data):
-        return min(numpy.linalg.norm(center - data) for center in centers)
+        return min(numpy.linalg.norm(center - data) for center in centers)**2
 
-    centers = [random.choice(dataset)]
+    np_random = numpy.random.RandomState(seed)
+    centers = [dataset[np_random.randint(len(dataset))]]
     for _ in range(k - 1):
         centers.append(
-            numpy.random.choice(
+            np_random.choice(
                 dataset,
                 p=(get_weight(data) for data in dataset)
             )
         )
     return centers
 
-def kmeans(dataset, k, init=kmeans_pp, max_iter=1024):
-    centers = initialize(dataset, k)
+def kmeans(dataset, k, init=kmeans_pp, max_iter=1024, seed=None):
+    centers = init(dataset, k, seed)
     clusters = []
     for _ in range(max_iter):
         converge = True
