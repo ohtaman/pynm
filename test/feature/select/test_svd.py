@@ -18,12 +18,14 @@ def can_treat_matrix_without_errors():
     u, s, v = svd.svd(matrix)
     ok_(True)
 
+
 @istest
 def result_is_similer_to_original_matrix():
     matrix = numpy.array([[1, 2, 3],[0,1,7],[7,8,1],[9,0,1]])
     u, s, v = svd.svd(matrix)
     diff = numpy.amax(abs(matrix -u.dot(numpy.diag(s)).dot(v)))
     ok_(diff < 0.001)
+
 
 @istest
 def can_reduce_dimension():

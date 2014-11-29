@@ -3,11 +3,12 @@
 import numpy.random
 import numpy.linalg
 
+
 def _orthogonalize(matrix):
     return numpy.linalg.qr(matrix)[0]
 
-def svd(matrix, d=None, k=10, u=True, s=True, v=True, seed=None, approx=True):
 
+def svd(matrix, d=None, k=10, u=True, s=True, v=True, seed=None, approx=True):
     max_rank = min(matrix.shape)
     d = d if d is not None else max_rank
     # to reduce error, calc with dim=internal_d internally
