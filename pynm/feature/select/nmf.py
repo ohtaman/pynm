@@ -29,6 +29,22 @@ def nmf(matrix,
         threshould=0.001,
         epsilon=1e-9,
         seed=None):
+    """Non-negative Matrix Factorization function
+
+    :param numpy.array matrix: Matrix to decompose
+    :param int dim: dimension of matrix
+    :param float distance: distance to minimize. choose "euclid" or "kl".
+                       euclid: Euclid distance
+                       k: Kullback Leibler divergence
+                     default: "euclid"
+    :param int max_iter: max #iteration of calculation
+                     defau:t] 10000
+    :param float thresould: threshould to regard as converged
+    :param float epsilon: epsilon to avoid zero division
+    :param int seed: random seed
+
+    :return: factorized matrix w and h
+    """
     max_rank = min(matrix.shape)
     dim = min(dim, max_rank) if dim is not None else max_rank
 

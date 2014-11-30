@@ -8,13 +8,32 @@ def _orthogonalize(matrix):
     return numpy.linalg.qr(matrix)[0]
 
 
-def svd(matrix, d=None, k=10, u=True, s=True, v=True, seed=None, approx=True):
-    max_rank = min(matrix.shape)
-    d = d if d is not None else max_rank
-    # to reduce error, calc with dim=internal_d internally
-    internal_d = min(d + k, max_rank)
+def svd(matrix, dim=None, k=10, u=True, s=True, v=True, seed=None, approx=True):
+    """Singular Value Decomposion function
 
-    if internal_d == max_rank or not approx:
+    :param numpy.array matrix: Matrix to decompose
+    :param int dim: dimension of matrix
+                    default: min(matrix.shape)
+    :param int k: additional dimension to improve accuracy of approximation.
+                  default: 10
+    :param bool u: calculate U matrix
+                   defaut: True
+    :param bool s: calculate S vector
+                   defaut: True
+    :param bool v: calculate V matrix
+                   defaut: True
+    :param int seed: random seed
+    :param bool approx: use approximation. (see http://arxiv.org/abs/0909.4061)
+
+    :return: factorized matrix U, S and V
+    """
+
+    max_rank = min(matrix.shape)
+    dim = dim if dim is not None else max_rank
+    # to reduce error, calc with dim=internal_dim internally
+    internal_dim = min(dim + k, max_rank)
+
+    if internal_dim == max_rank or not approx:
         u_, s_, v_ = numpy.linalg.svd(matrix)
         return u_[:, :d], s_[:d], v_[:d, :]
 
