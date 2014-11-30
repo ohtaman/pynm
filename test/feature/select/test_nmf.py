@@ -121,7 +121,7 @@ def can_approx_original_matrix_with_kl_divergent():
         w, h = nmf.nmf(matrix, distance="kl")
         diff += numpy.amax(abs(matrix - w.dot(h)))
         logger.info(diff)
-    ok_(diff/100.0 < 0.2)
+    ok_(diff/100.0 < 1)
 
 @istest
 def can_approx_zero_matrix_with_kl_divergent():
