@@ -35,23 +35,23 @@ def svd(matrix, dim=None, k=10, u=True, s=True, v=True, seed=None, approx=True):
 
     if internal_dim == max_rank or not approx:
         u_, s_, v_ = numpy.linalg.svd(matrix)
-        return u_[:, :d], s_[:d], v_[:d, :]
+        return u_[:, :dim], s_[:dim], v_[:dim, :]
 
     # cost effective
     if matrix.shape[0] > matrix.shape[1]:
-        v_, s_, u_ = svd(matrix.transpose(), d, k, v, s, u, seed, approx)
+        v_, s_, u_ = svd(matrix.transpose(), dim, k, v, s, u, seed, approx)
         return (u_.transpose() if u else None,
                 s_ if s else None,
                 v_.transpose() if v else None)
 
     np_random = numpy.random.RandomState(seed)
-    o = np_random.normal(size=(matrix.shape[0], internal_d))
+    o = np_random.normal(size=(matrix.shape[0], internal_dim))
     y = _orthogonalize(matrix.transpose().dot(o))
     b = matrix.dot(y)
-    p = np_random.normal(size=(internal_d, internal_d))
+    p = np_random.normal(size=(internal_dim, internal_dim))
     z = _orthogonalize(b.dot(p))
     c = z.transpose().dot(b)
     u_, s_, v_ = numpy.linalg.svd(c)
-    return (z.dot(u_[:, :d]) if u else None,
-            s_[:d] if s else None,
-            v_[:d, :].dot(y.transpose()) if v else None)
+    return (z.dot(u_[:, :dim]) if u else None,
+            s_[:dim] if s else None,
+            v_[:dim, :].dot(y.transpose()) if v else None)
