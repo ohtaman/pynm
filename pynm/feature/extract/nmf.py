@@ -4,7 +4,8 @@ import numpy
 import numpy.random
 import numpy.linalg
 
-import pynm.feature.select.svd as svd
+from . import svd
+
 
 def svd_init(matrix, dim, seed=None):
     u, s, v = svd.svd(matrix, dim)

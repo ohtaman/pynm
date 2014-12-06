@@ -7,7 +7,7 @@ from nose.tools import *
 import numpy
 import numpy.linalg
 
-from pynm.feature.select import svd
+from pynm.feature.extract import svd
 
 
 logger = logging.getLogger(__name__)
