@@ -1,8 +1,21 @@
 # -*- coding:utf-8 -*-
 
+import numpy
 import numpy.random
 import numpy.linalg
 
+import pynm.feature.select.svd as svd
+
+def svd_init(matrix, dim, seed=None):
+    u, s, v = svd.svd(matrix, dim)
+    ss = numpy.sqrt(numpy.diag(s))
+    return numpy.maximum(0.001, u.dot(ss)), numpy.maximum(0.001, ss.dot(v))
+
+def random_init(matrix, dim, seed=None):
+    np_random = numpy.random.RandomState(seed)
+    w = np_random.uniform(size=(matrix.shape[0], dim))
+    h = np_random.uniform(size=(dim, matrix.shape[1]))
+    return w, h
 
 def _improve_euclidean_distance(orig, current, w, h, epsilon=1e-9):
     wt = w.transpose()
@@ -25,6 +38,7 @@ def _improve_kl_diveregence(orig, current, w, h, epsilon=1e-9):
 def nmf(matrix,
         dim=None,
         distance="euclid",
+        init=svd_init,
         max_iter=10000,
         threshould=0.001,
         epsilon=1e-9,
@@ -53,9 +67,7 @@ def nmf(matrix,
     elif distance == "kl":
         _improve = _improve_kl_diveregence
 
-    np_random = numpy.random.RandomState(seed)
-    w = np_random.uniform(size=(matrix.shape[0], dim))
-    h = np_random.uniform(size=(dim, matrix.shape[1]))
+    w, h = init(matrix, dim, seed)
 
     wh = w.dot(h)
     prev_norm = numpy.linalg.norm(matrix - wh)
