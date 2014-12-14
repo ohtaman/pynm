@@ -21,6 +21,7 @@ def teardown():
 def test_cli_load_data():
     input_data_file = os.sep.join((dirname,
                                    '..',
+                                   'feature',
                                    'metric',
                                    'input_data.csv'))
     with open(input_data_file) as input_data:
@@ -37,6 +38,7 @@ def test_cli_load_data():
 def test_cli_load_labels():
     input_labels_file = os.sep.join((dirname,
                                      '..',
+                                     'feature',
                                      'metric',
                                      'input_labels.csv'))
     with open(input_labels_file) as input_labels:
@@ -47,6 +49,7 @@ def test_cli_load_labels():
 def test_cli_load_pairs():
     input_pairs_file = os.sep.join((dirname,
                                     '..',
+                                    'feature',
                                     'metric',
                                     'input_pairs.csv'))
     with open(input_pairs_file) as input_pairs:

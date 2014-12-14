@@ -6,7 +6,7 @@ import math
 from nose.tools import *
 import numpy
 
-from pynm.metric import itml
+from pynm.feature.metric import itml
 
 
 logger = logging.getLogger(__name__)

@@ -6,7 +6,7 @@ import sys
 
 import numpy
 
-from pynm.metric.itml import learn_metric, convert_data
+from pynm.feature.metric.itml import learn_metric, convert_data
 
 
 class ItmlCommand:
