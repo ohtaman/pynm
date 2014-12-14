@@ -42,7 +42,7 @@ def learn_metric(data,
                  u=1,
                  l=1,
                  slack=1,
-                 max_iter=1000,
+                 max_iter=1024,
                  balance=False,
                  is_sparse=False):
     if labels is not None:

@@ -19,7 +19,7 @@ def can_treat_matrix_without_errors():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix)
-    ok_(True)
+    ok_(True, 'Failed to decomposit a matrix')
 
 
 @istest
@@ -29,13 +29,13 @@ def result_is_positive_matrix():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix)
-    ok_(numpy.amin(w) >= 0)
-    ok_(numpy.amin(h) >= 0)
+    ok_(numpy.amin(w) >= 0, 'W of a matrix is not positive')
+    ok_(numpy.amin(h) >= 0, 'H of a matrix is not positive')
 
     matrix = numpy.zeros((4, 3))
     w, h = nmf.nmf(matrix)
-    ok_(numpy.amin(w) >= 0)
-    ok_(numpy.amin(h) >= 0)
+    ok_(numpy.amin(w) >= 0, 'W of zero matrix is not positive')
+    ok_(numpy.amin(h) >= 0, 'W of zero matrix is not positive')
 
 
 @istest
@@ -45,8 +45,8 @@ def can_reduce_dimension():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, 2)
-    eq_(w.shape, (4, 2))
-    eq_(h.shape, (2, 3))
+    eq_(w.shape, (4, 2), 'dim(W) is not correct')
+    eq_(h.shape, (2, 3), 'dim(W) is not correct')
 
 
 @istest
@@ -59,8 +59,7 @@ def can_approx_original_matrix():
     for _ in range(100):
         w, h = nmf.nmf(matrix)
         diff += numpy.amax(abs(matrix - w.dot(h)))
-        logger.info(diff)
-    ok_(diff/100.0 < 0.12)
+    ok_(diff/100.0 < 0.12, 'NMF cannot apporximate a matrix (%s > 0.12)' % diff)
 
 @istest
 def can_approx_zero_matrix():
@@ -69,8 +68,7 @@ def can_approx_zero_matrix():
     for _ in range(100):
         w, h = nmf.nmf(matrix, max_iter=1000)
         diff += numpy.amax(w.dot(h))
-        logger.info(diff)
-    ok_(diff/100.0 < 0.12)
+    ok_(diff/100.0 < 0.12, 'NMF cannot apporximate zero matrix (%s > 0.12)' % diff)
 
 
 @istest
@@ -80,7 +78,7 @@ def can_treat_matrix_without_errors_with_kl_divergent():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, distance="kl")
-    ok_(True)
+    ok_(True, 'Failed to decomposit a matrix')
 
 
 @istest
@@ -90,13 +88,13 @@ def result_is_positive_matrix_with_kl_divergent():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, distance="kl")
-    ok_(numpy.amin(w) >= 0)
-    ok_(numpy.amin(h) >= 0)
+    ok_(numpy.amin(w) >= 0, 'W of a matrix is not positive')
+    ok_(numpy.amin(h) >= 0, 'H of a matrix is not positive')
 
     matrix = numpy.zeros((4, 3))
     w, h = nmf.nmf(matrix, distance="kl")
-    ok_(numpy.amin(w) >= 0)
-    ok_(numpy.amin(h) >= 0)
+    ok_(numpy.amin(w) >= 0, 'W of zero matrix is not positive')
+    ok_(numpy.amin(h) >= 0, 'W of zero matrix is not positive')
 
 
 @istest
@@ -106,8 +104,8 @@ def can_reduce_dimension_with_kl_divergent():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, 2, distance="kl")
-    eq_(w.shape, (4, 2))
-    eq_(h.shape, (2, 3))
+    eq_(w.shape, (4, 2), 'dim(W) is not correct')
+    eq_(h.shape, (2, 3), 'dim(W) is not correct')
 
 
 @istest
@@ -120,8 +118,7 @@ def can_approx_original_matrix_with_kl_divergent():
     for _ in range(100):
         w, h = nmf.nmf(matrix, distance="kl")
         diff += numpy.amax(abs(matrix - w.dot(h)))
-        logger.info(diff)
-    ok_(diff/100.0 < 1)
+    ok_(diff/100.0 < 1, 'NMF cannot apporximate a matrix (%s > 1.)' % diff)
 
 
 @istest
@@ -131,8 +128,7 @@ def can_approx_zero_matrix_with_kl_divergent():
     for _ in range(100):
         w, h = nmf.nmf(matrix, max_iter=1000, distance="kl")
         diff += numpy.amax(w.dot(h))
-        logger.info(diff)
-    ok_(diff/100.0 < 0.2)
+    ok_(diff/100.0 < 0.2, 'NFM cannot apporoximate zero matrix (%s > 0.2)' % diff)
 
 
 
@@ -143,13 +139,13 @@ def result_is_positive_matrix_with_random_init():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, init=nmf.random_init)
-    ok_(numpy.amin(w) >= 0)
-    ok_(numpy.amin(h) >= 0)
+    ok_(numpy.amin(w) >= 0, 'W of a matrix is not positive')
+    ok_(numpy.amin(h) >= 0, 'H of a matrix is not positive')
 
     matrix = numpy.zeros((4, 3))
     w, h = nmf.nmf(matrix, init=nmf.random_init)
-    ok_(numpy.amin(w) >= 0)
-    ok_(numpy.amin(h) >= 0)
+    ok_(numpy.amin(w) >= 0, 'W of zero matrix is not positive')
+    ok_(numpy.amin(h) >= 0, 'W of zero matrix is not positive')
 
 
 @istest
@@ -159,8 +155,8 @@ def can_reduce_dimension_with_random_init():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, 2, init=nmf.random_init)
-    eq_(w.shape, (4, 2))
-    eq_(h.shape, (2, 3))
+    eq_(w.shape, (4, 2), 'dim(W) is not correct')
+    eq_(h.shape, (2, 3), 'dim(W) is not correct')
 
 
 @istest
@@ -173,8 +169,8 @@ def can_approx_original_matrix_with_random_init():
     for _ in range(100):
         w, h = nmf.nmf(matrix, init=nmf.random_init)
         diff += numpy.amax(abs(matrix - w.dot(h)))
-        logger.info(diff)
-    ok_(diff/100.0 < 0.12)
+    ok_(diff/100.0 < 0.12, 'NMF cannot apporximate a matrix (%s > 0.12)' % diff)
+
 
 @istest
 def can_approx_zero_matrix_with_random_init():
@@ -183,8 +179,7 @@ def can_approx_zero_matrix_with_random_init():
     for _ in range(100):
         w, h = nmf.nmf(matrix, init=nmf.random_init, max_iter=1000)
         diff += numpy.amax(w.dot(h))
-        logger.info(diff)
-    ok_(diff/100.0 < 0.12)
+    ok_(diff/100.0 < 0.2, 'NFM cannot apporoximate zero matrix (%s > 0.2)' % diff)
 
 
 @istest
@@ -194,7 +189,7 @@ def can_treat_matrix_without_errors_with_kl_divergent_with_random_init():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, init=nmf.random_init, distance="kl")
-    ok_(True)
+    ok_(True, 'Failed to decomposit a matrix')
 
 
 @istest
@@ -204,13 +199,13 @@ def result_is_positive_matrix_with_kl_divergent_with_random_init():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, init=nmf.random_init, distance="kl")
-    ok_(numpy.amin(w) >= 0)
-    ok_(numpy.amin(h) >= 0)
+    ok_(numpy.amin(w) >= 0, 'W of a matrix is not positive')
+    ok_(numpy.amin(h) >= 0, 'H of a matrix is not positive')
 
     matrix = numpy.zeros((4, 3))
     w, h = nmf.nmf(matrix, init=nmf.random_init, distance="kl")
-    ok_(numpy.amin(w) >= 0)
-    ok_(numpy.amin(h) >= 0)
+    ok_(numpy.amin(w) >= 0, 'W of zero matrix is not positive')
+    ok_(numpy.amin(h) >= 0, 'W of zero matrix is not positive')
 
 
 @istest
@@ -220,8 +215,8 @@ def can_reduce_dimension_with_kl_divergent_with_random_init():
                           [7, 8, 1],
                           [9, 0, 1]])
     w, h = nmf.nmf(matrix, dim=2, init=nmf.random_init, distance="kl")
-    eq_(w.shape, (4, 2))
-    eq_(h.shape, (2, 3))
+    eq_(w.shape, (4, 2), 'dim(W) is not correct')
+    eq_(h.shape, (2, 3), 'dim(W) is not correct')
 
 
 @istest
@@ -234,8 +229,7 @@ def can_approx_original_matrix_with_kl_divergent_with_random_init():
     for _ in range(100):
         w, h = nmf.nmf(matrix, init=nmf.random_init, distance="kl")
         diff += numpy.amax(abs(matrix - w.dot(h)))
-        logger.info(diff)
-    ok_(diff/100.0 < 1)
+    ok_(diff/100.0 < 1, 'NMF cannot apporximate a matrix (%s > 1.0)' % diff)
 
 @istest
 def can_approx_zero_matrix_with_kl_divergent_with_random_init():
@@ -244,7 +238,6 @@ def can_approx_zero_matrix_with_kl_divergent_with_random_init():
     for _ in range(100):
         w, h = nmf.nmf(matrix, init=nmf.random_init, max_iter=1000, distance="kl")
         diff += numpy.amax(w.dot(h))
-        logger.info(diff)
-    ok_(diff/100.0 < 0.2)
+    ok_(diff/100.0 < 0.2, 'NFM cannot apporoximate zero matrix (%s > 0.2)' % diff)
 
 
