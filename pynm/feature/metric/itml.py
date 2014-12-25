@@ -67,7 +67,7 @@ def learn_metric(data,
         data2 = data[j]
         similar = sample[2]
         delta = 1 if similar else -1
-        diff = data1 - data2
+        diff = numpy.array(data1) - numpy.array(data2)
         m_d = numpy.dot(metric, diff)
         p = numpy.dot(diff, m_d)
         if (i, j) in gsi_:

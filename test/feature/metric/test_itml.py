@@ -3,8 +3,8 @@
 import logging
 import math
 
-from nose.tools import *
 import numpy
+from nose.tools import *
 
 from pynm.feature.metric import itml
 
@@ -49,10 +49,10 @@ def test_sample_from_labels():
 
 
 def test_learn_metric_gather_similar_pairs():
-    test_data = [numpy.array((1, 1, 1)),
-                 numpy.array((1, 0, 0)),
-                 numpy.array((0, 1, 0)),
-                 numpy.array((0, 0, 0))]
+    test_data = [(1, 1, 1),
+                 (1, 0, 0),
+                 (0, 1, 0),
+                 (0, 0, 0)]
     pairs = [(0, 1, True),
              (0, 2, False),
              (0, 3, False),
