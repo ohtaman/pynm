@@ -18,6 +18,23 @@ def random_init(matrix, dim, seed=None):
     h = np_random.uniform(size=(dim, matrix.shape[1]))
     return w, h
 
+def _improve_beta_divergence(orig, current, w, h, epsilon=1e-9, beta=2.0):
+    if beta < 1:
+        phi = 1.0/(2.0-beta)
+    elif beta <= 2.0:
+        phi = 1.0
+    else:
+        phi = 1.0/(beta - 1.0)
+
+    wt = w.transpose()
+    h *= (wt.dot(orig * current**(beta - 2))/(wt.dot(current**(beta - 1)) + epsilon))**phi
+    ht = h.transpose()
+    current = w.dot(h)
+    w *= ((orig * current**(beta - 2)).dot(ht)/((current**(beta - 1)).dot(ht) + epsilon))**phi
+
+    return w.dot(h), w, h
+
+
 def _improve_euclidean_distance(orig, current, w, h, epsilon=1e-9):
     wt = w.transpose()
     h *= wt.dot(orig)/(wt.dot(current) + epsilon)
@@ -67,6 +84,8 @@ def nmf(matrix,
         _improve = _improve_euclidean_distance
     elif distance == "kl":
         _improve = _improve_kl_diveregence
+    elif distance == "beta":
+        _improve = _improve_beta_divergence
 
     w, h = init(matrix, dim, seed)
 
